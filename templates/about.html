@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}About StyleSync — Fashion Intelligence Atelier{% endblock %}
+
+{% block content %}
+<section style="padding: 60px 0 100px;">
+  <div class="container" style="max-width: 900px;">
+    <div style="text-align: center; margin-bottom: 50px;">
+      <div class="editorial-tag">The Philosophy</div>
+      <h1 class="font-serif" style="font-size: clamp(2.5rem, 4.5vw, 3.8rem); margin-bottom: 18px;">Fashion Discovery, Redefined.</h1>
+      <p style="color: var(--color-muted); font-size: 1.15rem; line-height: 1.6;">
+        Bridging the divide between fleeting visual inspirations and curated, accessible closets.
+      </p>
+    </div>
+
+    <div style="background: var(--color-cream-card); padding: 48px; border-radius: var(--radius-lg); border: 1px solid var(--color-border); margin-bottom: 40px; box-shadow: var(--shadow-sm);">
+      <h3 class="font-serif" style="font-size: 1.8rem; margin-bottom: 16px;">The Problem with Traditional Fashion Search</h3>
+      <p style="color: var(--color-mocha); line-height: 1.8; margin-bottom: 20px;">
+        How many times have you saved a screenshot on Pinterest, a frame from a film, or a streetstyle post, only to spend hours typing descriptions like <em>"oversized trench coat beige flap collar relaxed"</em> into search engines—only to be met with mismatched generic results?
+      </p>
+      <p style="color: var(--color-mocha); line-height: 1.8;">
+        Language is subjective. A drape, a specific tint of sage green, or an asymmetrical collar cannot be neatly captured by text tags alone. <strong>StyleSync</strong> solves this by using neural vision algorithms that analyze the genuine visual essence of garments.
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px;">
+      <div style="background: var(--color-cream); padding: 32px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+        <h4 class="font-serif" style="font-size: 1.4rem; margin-bottom: 12px; color: var(--color-espresso);">High Precision Matching</h4>
+        <p style="font-size: 0.92rem; color: var(--color-muted); line-height: 1.6;">
+          Pretrained on millions of image-text pairs, our CLIP vision pipeline recognizes subtle sartorial cues, proportions, textures, and palettes.
+        </p>
+      </div>
+
+      <div style="background: var(--color-cream); padding: 32px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+        <h4 class="font-serif" style="font-size: 1.4rem; margin-bottom: 12px; color: var(--color-espresso);">Luxury Editorial Aesthetic</h4>
+        <p style="font-size: 0.92rem; color: var(--color-muted); line-height: 1.6;">
+          Designed with warm ivory palettes, bespoke typography, and editorial layouts that celebrate fashion as an artform rather than a transactional feed.
+        </p>
+      </div>
+    </div>
+
+    <div style="text-align: center;">
+      <a href="{{ url_for('index') }}#uploadSection" class="btn btn-chartreuse">Experience Visual Search Now</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+

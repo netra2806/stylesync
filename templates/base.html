@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}StyleSync — AI-Powered Fashion Discovery{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div style="background-color: var(--color-espresso); color: #C9D948; font-size: 0.76rem; letter-spacing: 0.1em; text-transform: uppercase; text-align: center; padding: 7px 14px; font-weight: 600;">
+    ✦ Next-Gen Visual Intelligence • Discover Any Outfit With One Click ✦
+  </div>
+
+  <!-- Navigation Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="{{ url_for('index') }}" class="brand-logo">
+        STYLESYNC <span>/ atelier</span>
+        <span class="brand-badge">AI</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="{{ url_for('index') }}" class="{% if request.path == '/' %}active{% endif %}">Home</a></li>
+        <li><a href="{{ url_for('discover') }}" class="{% if request.path == '/discover' %}active{% endif %}">Discover</a></li>
+        <li><a href="{{ url_for('collections') }}" class="{% if request.path == '/collections' %}active{% endif %}">Collections</a></li>
+        <li><a href="{{ url_for('how_it_works') }}" class="{% if request.path == '/how-it-works' %}active{% endif %}">How It Works</a></li>
+        <li><a href="{{ url_for('about') }}" class="{% if request.path == '/about' %}active{% endif %}">About</a></li>
+        <li><a href="{{ url_for('admin') }}" class="{% if request.path.startswith('/admin') %}active{% endif %}" style="opacity: 0.85;">Admin</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Wishlist Drawer Trigger -->
+        <button class="nav-btn-icon" id="wishlistOpenBtn" title="View Wishlist" aria-label="Wishlist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+          <span class="badge-count" id="wishlistCount">0</span>
+        </button>
+
+        <a href="{{ url_for('index') }}#uploadSection" class="btn btn-chartreuse btn-sm" style="display: inline-flex;">Upload Outfit</a>
+
+        <!-- Mobile Hamburger -->
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle Navigation">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="container" style="margin-top: 18px;">
+        {% for category, message in messages %}
+          <div style="padding: 14px 20px; border-radius: var(--radius-md); font-size: 0.88rem; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; {% if category == 'error' %}background: #FDF2F0; color: #C0392B; border: 1px solid #FADBD8;{% else %}background: #F4F9ED; color: #27AE60; border: 1px solid #D5E8B6;{% endif %}">
+            <span>{{ message }}</span>
+            <button onclick="this.parentElement.remove()" style="background: none; border: none; font-size: 1.1rem; cursor: pointer; color: inherit;">&times;</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Main Dynamic Content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Wishlist Drawer Slider -->
+  <div class="drawer-overlay" id="wishlistOverlay"></div>
+  <aside class="wishlist-drawer" id="wishlistDrawer">
+    <div class="drawer-header">
+      <h3 class="font-serif">Curated Wishlist</h3>
+      <button class="drawer-close" id="wishlistCloseBtn">&times;</button>
+    </div>
+    <div class="drawer-body" id="wishlistItems">
+      <!-- Injected via JavaScript from localStorage -->
+    </div>
+  </aside>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3 class="font-serif">StyleSync</h3>
+          <p>The visual AI fashion intelligence platform. Reverse-engineering runway inspirations into attainable luxury wardrobe edits.</p>
+          <div style="margin-top: 18px; font-size: 0.82rem; color: #A09489;">
+            Powered by OpenAI CLIP & PyTorch Embeddings
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('discover') }}">Discover Catalog</a></li>
+            <li><a href="{{ url_for('collections') }}">Curated Collections</a></li>
+            <li><a href="{{ url_for('how_it_works') }}">AI Technology</a></li>
+            <li><a href="{{ url_for('about') }}">About StyleSync</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Aesthetic Curation</h4>
+          <ul>
+            <li><a href="{{ url_for('discover', category='Streetwear') }}">Modern Streetwear</a></li>
+            <li><a href="{{ url_for('discover', category='Minimalist Fashion') }}">Minimalist Atelier</a></li>
+            <li><a href="{{ url_for('discover', category='Dresses') }}">Evening & Party</a></li>
+            <li><a href="{{ url_for('discover', category='Casual Wear') }}">Casual Riviera</a></li>
+            <li><a href="{{ url_for('discover', category='Traditional Wear') }}">Heritage Weaves</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>System</h4>
+          <ul>
+            <li><a href="{{ url_for('admin') }}">Admin Catalog Manager</a></li>
+            <li><a href="#uploadSection">Reverse Image Search</a></li>
+            <li><a href="https://huggingface.co/openai/clip-vit-base-patch32" target="_blank" rel="noopener noreferrer">Hugging Face CLIP</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 StyleSync Technologies Inc. All rights reserved. Crafted for haute couture discovery.</div>
+        <div style="display: flex; gap: 20px;">
+          <a href="#">Privacy Editorial</a>
+          <a href="#">Terms of Curation</a>
+          <a href="#">AI Ethics & Safety</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Wrapper -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Global Javascript -->
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
+

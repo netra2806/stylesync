@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Curated Collections — StyleSync{% endblock %}
+
+{% block content %}
+<section class="collections-section">
+  <div class="container">
+    <div class="section-header" style="margin-bottom: 60px;">
+      <div class="editorial-tag">Seasonal Lookbooks & Themes</div>
+      <h1 class="font-serif" style="font-size: clamp(2.6rem, 5vw, 3.8rem); margin-bottom: 16px;">Curated Aesthetics</h1>
+      <p>Immerse yourself into distinct visual moods. From minimalist architectural cuts to opulent traditional craftsmanship, explore outfits tailored for every realm.</p>
+    </div>
+
+    <div class="editorial-collection-grid">
+      {% for collection in collections %}
+      <div class="collection-card">
+        <img src="{{ collection.image }}" alt="{{ collection.title }}" class="collection-card-bg" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80'">
+        <div class="collection-card-content">
+          <div class="collection-category-tag">{{ collection.category }}</div>
+          <h3 class="font-serif">{{ collection.title }}</h3>
+          <p>{{ collection.description }}</p>
+          <a href="{{ url_for('discover', category=collection.category) }}" class="btn btn-chartreuse btn-sm">Explore Collection &rarr;</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+

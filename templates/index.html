@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}StyleSync — Find Your Next Favourite Look{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container hero-grid">
+    <div class="hero-content">
+      <div class="editorial-tag">
+        <span class="dot"></span>
+        <span>Visual AI Fashion Engine 2.0</span>
+      </div>
+
+      <h1 class="hero-title">
+        Find Your Next<br>
+        <em>Favourite Look.</em>
+      </h1>
+
+      <p class="hero-subtitle">
+        One picture. Endless possibilities. Discover outfits that match your aesthetic through high-precision neural visual search.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#uploadSection" class="btn btn-chartreuse">
+          <span>Discover Your Style</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+
+        <a href="{{ url_for('discover') }}" class="btn btn-outline">
+          <span>Explore Catalog</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Floating Fashion Collage -->
+    <div class="hero-visual">
+      <div class="hero-image-main">
+        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=720&q=80" alt="Haute Fashion Model">
+      </div>
+
+      <!-- Floating Card 1 -->
+      <div class="floating-card floating-card-1">
+        <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=150&q=80" alt="Matched Trench">
+        <div class="floating-card-info">
+          <h4>Wool Overcoat</h4>
+          <p>Bottega Veneta</p>
+        </div>
+        <span class="match-chip">98% Match</span>
+      </div>
+
+      <!-- Floating Card 2 -->
+      <div class="floating-card floating-card-2">
+        <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=150&q=80" alt="Leather Bag">
+        <div class="floating-card-info">
+          <h4>Leather Bag</h4>
+          <p>Khaite Atelier</p>
+        </div>
+        <span class="match-chip">96% Match</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Image Upload Section -->
+<section class="upload-section" id="uploadSection">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="font-serif">Got an Outfit Crush?</h2>
+      <p>Upload an inspiration image from Pinterest, Instagram or your camera roll and let our AI match it across luxury & contemporary boutiques.</p>
+    </div>
+
+    <div class="upload-box-wrapper">
+      <form action="{{ url_for('search_outfit') }}" method="POST" enctype="multipart/form-data" id="outfitUploadForm">
+        <input type="file" name="image" id="outfitInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;" required>
+
+        <!-- Drag & Drop Area -->
+        <div class="upload-dropzone" id="uploadDropzone">
+          <div class="dropzone-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <div class="dropzone-prompt">
+            <h3 class="font-serif">Drag & Drop Your Outfit Photo Here</h3>
+            <p>Or tap anywhere to browse files from your gallery</p>
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('outfitInput').click()">Browse Image</button>
+          </div>
+          <div class="upload-limits">
+            <span>JPG, PNG, WEBP supported</span>
+            <span>•</span>
+            <span>Up to 8 MB</span>
+            <span>•</span>
+            <span>Instant CLIP AI Vectorization</span>
+          </div>
+        </div>
+
+        <!-- Image Preview Card (Revealed on select) -->
+        <div class="preview-container" id="previewContainer">
+          <div class="preview-grid">
+            <div class="preview-image-box">
+              <img id="previewImg" src="" alt="Uploaded outfit preview">
+            </div>
+            <div class="preview-details">
+              <div class="editorial-tag" style="margin-bottom: 12px; background: #E8F5E9; color: #2E7D32;">
+                <span>✓ Validated Outfit Image</span>
+              </div>
+              <h4 class="font-serif" id="previewFilename">outfit-inspiration.jpg</h4>
+              <p class="preview-meta" id="previewFilesize">Calculated Image Vectors</p>
+              
+              <div class="preview-actions">
+                <button type="submit" class="btn btn-chartreuse">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <span>Find Similar Outfits</span>
+                </button>
+                <button type="button" class="btn btn-outline" id="removeImageBtn">Replace Photo</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Catalog Preview -->
+<section style="padding: 90px 0; background: var(--color-bg);">
+  <div class="container">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;">
+      <div>
+        <div class="editorial-tag">Runway & Contemporary Highlights</div>
+        <h2 class="font-serif" style="font-size: 2.4rem;">Curated Pieces from Catalog</h2>
+      </div>
+      <a href="{{ url_for('discover') }}" class="btn btn-outline btn-sm">View Complete Catalog &rarr;</a>
+    </div>
+
+    <div class="masonry-grid">
+      {% for product in featured_products %}
+      <div class="product-card">
+        <div class="product-image-container">
+          <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=600&q=80'">
+          <button class="product-wishlist-btn" data-product-id="{{ product.id }}" onclick="toggleWishlist({id: {{ product.id }}, name: '{{ product.name|replace("'", "\\'") }}', brand: '{{ product.brand|replace("'", "\\'") }}', price: {{ product.price }}, image: '{{ product.image_url }}', url: '{{ product.shopping_url }}'})" title="Save to wishlist">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </button>
+        </div>
+        <div class="product-content">
+          <div class="product-brand">{{ product.brand }}</div>
+          <h3 class="product-title">{{ product.name }}</h3>
+          <div class="product-category-color">{{ product.category }} • {{ product.color }}</div>
+          <div class="product-footer">
+            <div class="product-price">${{ "%.2f"|format(product.price) }}</div>
+            <a href="{{ product.shopping_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">View Product</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- AI Loading Modal -->
+<div class="ai-loading-overlay" id="loadingOverlay">
+  <div class="ai-pulse-circle"></div>
+  <h3 class="ai-loading-title">Analyzing Your Outfit...</h3>
+  <p class="ai-loading-desc">Extracting CLIP image embeddings & calculating multi-dimensional cosine similarity...</p>
+</div>
+{% endblock %}
+

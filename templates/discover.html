@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Discover Fashion Catalog — StyleSync{% endblock %}
+
+{% block content %}
+<section style="padding: 50px 0 100px;">
+  <div class="container">
+    <div style="margin-bottom: 40px; text-align: center; max-width: 720px; margin-left: auto; margin-right: auto;">
+      <div class="editorial-tag">The StyleSync Curated Catalog</div>
+      <h1 class="font-serif" style="font-size: clamp(2.4rem, 4.5vw, 3.4rem); margin-bottom: 14px;">Discover Without Limits</h1>
+      <p style="color: var(--color-muted); font-size: 1.05rem;">
+        Explore hand-selected couture, streetwear, and minimalist wardrobe essentials. Filter by color, collection, or price.
+      </p>
+    </div>
+
+    <!-- Filter & Search Controls -->
+    <form method="GET" action="{{ url_for('discover') }}" class="filter-bar">
+      <div class="filter-group">
+        <label for="category" style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; color: var(--color-muted);">Category:</label>
+        <select name="category" id="category" class="filter-select" onchange="this.form.submit()">
+          <option value="All" {% if selected_category == 'All' %}selected{% endif %}>All Categories</option>
+          {% for cat in categories %}
+          <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+          {% endfor %}
+        </select>
+
+        <label for="color" style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; color: var(--color-muted);">Colour:</label>
+        <select name="color" id="color" class="filter-select" onchange="this.form.submit()">
+          <option value="All" {% if selected_color == 'All' %}selected{% endif %}>All Colours</option>
+          {% for col in colors %}
+          <option value="{{ col }}" {% if selected_color == col %}selected{% endif %}>{{ col }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="sort" style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; color: var(--color-muted);">Sort:</label>
+        <select name="sort" id="sort" class="filter-select" onchange="this.form.submit()">
+          <option value="best_match" {% if selected_sort == 'best_match' %}selected{% endif %}>Featured Default</option>
+          <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+          <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+          <option value="newest" {% if selected_sort == 'newest' %}selected{% endif %}>Newest Additions</option>
+        </select>
+
+        {% if selected_category != 'All' or selected_color != 'All' or selected_sort != 'best_match' %}
+        <a href="{{ url_for('discover') }}" class="btn btn-outline btn-sm">Clear Filters</a>
+        {% endif %}
+      </div>
+    </form>
+
+    <!-- Product Grid -->
+    {% if products %}
+    <div class="masonry-grid">
+      {% for product in products %}
+      <div class="product-card">
+        <div class="product-image-container">
+          <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=600&q=80'">
+          <button class="product-wishlist-btn" 
+                  data-product-id="{{ product.id }}" 
+                  onclick="toggleWishlist({id: {{ product.id }}, name: '{{ product.name|replace("'", "\\'") }}', brand: '{{ product.brand|replace("'", "\\'") }}', price: {{ product.price }}, image: '{{ product.image_url }}', url: '{{ product.shopping_url }}'})" 
+                  title="Save to wishlist">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="product-content">
+          <div class="product-brand">{{ product.brand }}</div>
+          <h3 class="product-title">{{ product.name }}</h3>
+          <div class="product-category-color">{{ product.category }} • {{ product.color }}</div>
+          <p style="font-size: 0.8rem; color: var(--color-muted); margin-bottom: 14px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+            {{ product.description }}
+          </p>
+          <div class="product-footer">
+            <div class="product-price">${{ "%.2f"|format(product.price) }}</div>
+            <a href="{{ product.shopping_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">View Product</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 80px 20px; background: var(--color-cream-card); border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+      <h3 class="font-serif" style="font-size: 2rem; margin-bottom: 10px;">No Products Found</h3>
+      <p style="color: var(--color-muted); margin-bottom: 24px;">No products match your selected category and color criteria.</p>
+      <a href="{{ url_for('discover') }}" class="btn btn-chartreuse">View All Products</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+

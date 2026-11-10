@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}How It Works — StyleSync Neural Architecture{% endblock %}
+
+{% block content %}
+<section style="padding: 70px 0 100px;">
+  <div class="container" style="max-width: 960px;">
+    <div style="text-align: center; margin-bottom: 60px;">
+      <div class="editorial-tag">Neural Computer Vision & Precomputed Vectors</div>
+      <h1 class="font-serif" style="font-size: clamp(2.5rem, 4.5vw, 3.6rem); margin-bottom: 16px;">How StyleSync Decodes Fashion</h1>
+      <p style="color: var(--color-muted); font-size: 1.1rem; line-height: 1.6;">
+        Unlike conventional keyword search that relies on subjective product tags, StyleSync understands fashion the way human eyes do — through patterns, color harmonies, silhouettes, and fabric textures.
+      </p>
+    </div>
+
+    <!-- Step by Step Cards -->
+    <div style="display: flex; flex-direction: column; gap: 36px;">
+      <!-- Step 1 -->
+      <div style="display: grid; grid-template-columns: 80px 1fr; gap: 24px; background: var(--color-cream-card); padding: 36px; border-radius: var(--radius-lg); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);">
+        <div style="font-family: var(--font-serif); font-size: 2.8rem; font-weight: 600; color: var(--color-chartreuse); text-align: center;">01</div>
+        <div>
+          <h3 class="font-serif" style="font-size: 1.5rem; margin-bottom: 10px;">Visual Ingestion & Preprocessing</h3>
+          <p style="color: var(--color-muted); line-height: 1.6;">
+            When you upload an outfit inspiration image (from Pinterest, Instagram, or street photography), our system verifies resolution, sanitizes inputs, and formats the image tensor through standard Vision Transformer bicubic resizing and RGB normalization.
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div style="display: grid; grid-template-columns: 80px 1fr; gap: 24px; background: var(--color-cream-card); padding: 36px; border-radius: var(--radius-lg); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);">
+        <div style="font-family: var(--font-serif); font-size: 2.8rem; font-weight: 600; color: var(--color-chartreuse); text-align: center;">02</div>
+        <div>
+          <h3 class="font-serif" style="font-size: 1.5rem; margin-bottom: 10px;">CLIP ViT Feature Vectorization</h3>
+          <p style="color: var(--color-muted); line-height: 1.6;">
+            The processed tensor is fed into the deep neural layers of <strong>OpenAI's CLIP (Contrastive Language-Image Pretraining)</strong> vision encoder. The model extracts a high-density 512-dimensional numerical embedding vector that encapsulates visual semantics: colors, drapery, collars, cuts, and material sheen.
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div style="display: grid; grid-template-columns: 80px 1fr; gap: 24px; background: var(--color-cream-card); padding: 36px; border-radius: var(--radius-lg); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);">
+        <div style="font-family: var(--font-serif); font-size: 2.8rem; font-weight: 600; color: var(--color-chartreuse); text-align: center;">03</div>
+        <div>
+          <h3 class="font-serif" style="font-size: 1.5rem; margin-bottom: 10px;">Precomputed Database Matching</h3>
+          <p style="color: var(--color-muted); line-height: 1.6;">
+            Every product in the StyleSync database is vectorized ahead of time upon insertion. Because embeddings are stored in SQLite and cached, the query requires zero re-training or full catalog re-encoding, resulting in lightning-fast millisecond matching.
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div style="display: grid; grid-template-columns: 80px 1fr; gap: 24px; background: var(--color-cream-card); padding: 36px; border-radius: var(--radius-lg); border: 1px solid var(--color-border); box-shadow: var(--shadow-sm);">
+        <div style="font-family: var(--font-serif); font-size: 2.8rem; font-weight: 600; color: var(--color-chartreuse); text-align: center;">04</div>
+        <div>
+          <h3 class="font-serif" style="font-size: 1.5rem; margin-bottom: 10px;">Cosine Similarity & Nearest-Neighbour Ranking</h3>
+          <p style="color: var(--color-muted); line-height: 1.6;">
+            Using vector geometry, we calculate the cosine of the angle between your query vector and all product vectors:
+            <code style="background: var(--color-cream); padding: 4px 8px; border-radius: 4px; font-size: 0.88rem; display: inline-block; margin-top: 6px;">similarity = (A • B) / (||A|| * ||B||)</code>.
+            The closest 10 visual matches are surfaced instantly with similarity scores and direct boutique links.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align: center; margin-top: 60px;">
+      <a href="{{ url_for('index') }}#uploadSection" class="btn btn-chartreuse">Try It With Your Own Photo</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+

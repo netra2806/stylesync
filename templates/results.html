@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Your Style, Decoded — StyleSync AI{% endblock %}
+
+{% block content %}
+<section style="padding: 50px 0 100px;">
+  <div class="container">
+    <!-- Header with Reference Image Overview -->
+    <div style="background: var(--color-cream-card); border-radius: var(--radius-lg); padding: 36px; border: 1px solid var(--color-border); margin-bottom: 50px; box-shadow: var(--shadow-sm);">
+      <div style="display: grid; grid-template-columns: 200px 1fr; gap: 36px; align-items: center;">
+        <div style="width: 200px; height: 260px; border-radius: var(--radius-md); overflow: hidden; border: 3px solid var(--color-espresso); box-shadow: var(--shadow-md);">
+          <img src="{{ reference_image }}" alt="Uploaded inspiration" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+
+        <div>
+          <div class="editorial-tag" style="background: var(--color-chartreuse); color: var(--color-espresso); font-weight: 700; border: none;">
+            ✦ AI Visual Similarity Matching Complete
+          </div>
+          <h1 class="font-serif" style="font-size: clamp(2.4rem, 4vw, 3.2rem); margin-bottom: 12px;">Your Style, Decoded.</h1>
+          <p style="color: var(--color-muted); max-width: 600px; font-size: 1.05rem; margin-bottom: 24px;">
+            Our neural CLIP encoder analyzed the silhouette, textures, and color tones of your inspiration image. Below are the top matches ranked by cosine similarity against our catalog.
+          </p>
+
+          <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+            <a href="{{ url_for('index') }}#uploadSection" class="btn btn-outline btn-sm">Upload New Outfit</a>
+            <span style="font-size: 0.84rem; color: var(--color-muted);">Showing <strong>{{ total_matches }}</strong> precision visual matches</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Filters & Sort Bar -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <span style="font-size: 0.84rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-muted);">Filter Results:</span>
+        <select class="filter-select" id="filterCategory" onchange="applyClientFilters()">
+          <option value="All">All Categories</option>
+          <option value="Streetwear">Streetwear</option>
+          <option value="Casual Wear">Casual Wear</option>
+          <option value="Party Wear">Party Wear</option>
+          <option value="Dresses">Dresses</option>
+          <option value="Traditional Wear">Traditional Wear</option>
+          <option value="Accessories">Accessories</option>
+          <option value="Minimalist Fashion">Minimalist Fashion</option>
+        </select>
+
+        <select class="filter-select" id="filterColor" onchange="applyClientFilters()">
+          <option value="All">All Colours</option>
+          <option value="Black">Black</option>
+          <option value="White">White</option>
+          <option value="Beige">Beige</option>
+          <option value="Brown">Brown</option>
+          <option value="Cream">Cream</option>
+          <option value="Blue">Blue</option>
+          <option value="Olive">Olive</option>
+          <option value="Red">Red</option>
+          <option value="Gold">Gold</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <span style="font-size: 0.84rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-muted);">Sort By:</span>
+        <select class="filter-select" id="sortBy" onchange="applyClientFilters()">
+          <option value="best_match">Best Match (Cosine Similarity)</option>
+          <option value="price_asc">Price: Low to High</option>
+          <option value="price_desc">Price: High to Low</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Results Masonry Grid -->
+    <div class="masonry-grid" id="resultsGrid">
+      {% for product in products %}
+      <div class="product-card" 
+           data-category="{{ product.category }}" 
+           data-color="{{ product.color }}" 
+           data-price="{{ product.price }}" 
+           data-match="{{ product.match_percentage }}">
+        <div class="product-image-container">
+          <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=600&q=80'">
+          
+          <div class="product-badge-group">
+            <span class="badge-match">{{ product.match_percentage }}% Match</span>
+          </div>
+
+          <button class="product-wishlist-btn" 
+                  data-product-id="{{ product.id }}" 
+                  onclick="toggleWishlist({id: {{ product.id }}, name: '{{ product.name|replace("'", "\\'") }}', brand: '{{ product.brand|replace("'", "\\'") }}', price: {{ product.price }}, image: '{{ product.image_url }}', url: '{{ product.shopping_url }}'})" 
+                  title="Save to wishlist">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="product-content">
+          <div class="product-brand">{{ product.brand }}</div>
+          <h3 class="product-title">{{ product.name }}</h3>
+          <div class="product-category-color">{{ product.category }} • {{ product.color }}</div>
+          <p style="font-size: 0.8rem; color: var(--color-muted); margin-bottom: 14px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+            {{ product.description }}
+          </p>
+          <div class="product-footer">
+            <div class="product-price">${{ "%.2f"|format(product.price) }}</div>
+            <a href="{{ product.shopping_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-chartreuse btn-sm">View Product</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Empty State -->
+    <div id="noResultsState" style="display: none; text-align: center; padding: 70px 20px;">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 16px; opacity: 0.4;">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <h3 class="font-serif" style="font-size: 1.8rem; margin-bottom: 8px;">No Outfits Matched the Filters</h3>
+      <p style="color: var(--color-muted); margin-bottom: 24px;">Try relaxing your category or colour filters to see all AI recommendations.</p>
+      <button class="btn btn-primary btn-sm" onclick="resetFilters()">Reset All Filters</button>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function applyClientFilters() {
+  const cat = document.getElementById('filterCategory').value;
+  const col = document.getElementById('filterColor').value;
+  const sort = document.getElementById('sortBy').value;
+
+  const grid = document.getElementById('resultsGrid');
+  const cards = Array.from(grid.querySelectorAll('.product-card'));
+  let visibleCount = 0;
+
+  // Filter visibility
+  cards.forEach(card => {
+    const cardCat = card.getAttribute('data-category');
+    const cardCol = card.getAttribute('data-color');
+    
+    const catMatch = (cat === 'All' || cardCat === cat);
+    const colMatch = (col === 'All' || cardCol === col);
+
+    if (catMatch && colMatch) {
+      card.style.display = 'flex';
+      visibleCount++;
+    } else {
+      card.style.display = 'none';
+    }
+  });
+
+  // Sort visible items
+  cards.sort((a, b) => {
+    if (sort === 'best_match') {
+      return parseFloat(b.getAttribute('data-match')) - parseFloat(a.getAttribute('data-match'));
+    } else if (sort === 'price_asc') {
+      return parseFloat(a.getAttribute('data-price')) - parseFloat(b.getAttribute('data-price'));
+    } else if (sort === 'price_desc') {
+      return parseFloat(b.getAttribute('data-price')) - parseFloat(a.getAttribute('data-price'));
+    }
+    return 0;
+  });
+
+  cards.forEach(card => grid.appendChild(card));
+
+  const noResults = document.getElementById('noResultsState');
+  if (visibleCount === 0) {
+    noResults.style.display = 'block';
+  } else {
+    noResults.style.display = 'none';
+  }
+}
+
+function resetFilters() {
+  document.getElementById('filterCategory').value = 'All';
+  document.getElementById('filterColor').value = 'All';
+  document.getElementById('sortBy').value = 'best_match';
+  applyClientFilters();
+}
+</script>
+{% endblock %}
+

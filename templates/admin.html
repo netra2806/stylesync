@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Catalog Manager — StyleSync{% endblock %}
+
+{% block content %}
+<section style="padding: 50px 0 100px;">
+  <div class="container">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 20px;">
+      <div>
+        <div class="editorial-tag">Management Console</div>
+        <h1 class="font-serif" style="font-size: 2.8rem;">Catalog & AI Embeddings Manager</h1>
+        <p style="color: var(--color-muted);">Add new products, upload genuine lookbook photos, and generate AI embeddings automatically.</p>
+      </div>
+
+      <button class="btn btn-chartreuse" onclick="toggleAddModal()">+ Add New Product</button>
+    </div>
+
+    <!-- Product Stats Bar -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px;">
+      <div style="background: var(--color-cream-card); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+        <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--color-muted); font-weight: 600;">Total Products</div>
+        <div style="font-family: var(--font-serif); font-size: 2.2rem; font-weight: 600; margin-top: 6px;">{{ products|length }}</div>
+      </div>
+      <div style="background: var(--color-cream-card); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+        <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--color-muted); font-weight: 600;">AI Embeddings Status</div>
+        <div style="font-family: var(--font-serif); font-size: 1.4rem; font-weight: 600; margin-top: 10px; color: #27AE60;">Active & Synced</div>
+      </div>
+      <div style="background: var(--color-cream-card); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+        <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--color-muted); font-weight: 600;">Model Architecture</div>
+        <div style="font-family: var(--font-serif); font-size: 1.2rem; font-weight: 600; margin-top: 10px;">CLIP ViT-B/32 (512-D)</div>
+      </div>
+    </div>
+
+    <!-- Add Product Form Card (Collapsible) -->
+    <div id="addProductCard" style="display: none; background: var(--color-cream-card); border-radius: var(--radius-lg); padding: 36px; border: 1px solid var(--color-border); margin-bottom: 50px; box-shadow: var(--shadow-md);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h3 class="font-serif" style="font-size: 1.8rem;">Add Product to Fashion Catalog</h3>
+        <button onclick="toggleAddModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      </div>
+
+      <form action="{{ url_for('admin_add_product') }}" method="POST" enctype="multipart/form-data">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 20px;">
+          <div>
+            <label style="display: block; font-size: 0.84rem; font-weight: 600; margin-bottom: 6px;">Product Name *</label>
+            <input type="text" name="name" required placeholder="e.g. Oversized Structured Wool Trench" style="width: 100%; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-family: inherit;">
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.84rem; font-weight: 600; margin-bottom: 6px;">Brand *</label>
+            <input type="text" name="brand" required placeholder="e.g. Totême, The Row, Khaite" style="width: 100%; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-family: inherit;">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 20px;">
+          <div>
+            <label style="display: block; font-size: 0.84rem; font-weight: 600; margin-bottom: 6px;">Category *</label>
+            <select name="category" required style="width: 100%; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-family: inherit;">
+              {% for cat in categories %}
+              <option value="{{ cat }}">{{ cat }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.84rem; font-weight: 600; margin-bottom: 6px;">Colour *</label>
+            <select name="color" required style="width: 100%; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-family: inherit;">
+              {% for col in colors %}
+              <option value="{{ col }}">{{ col }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.84rem; font-weight: 600; margin-bottom: 6px;">Price (USD) *</label>
+            <input type="number" step="0.01" name="price" required placeholder="280.00" style="width: 100%; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-family: inherit;">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 0.84rem; font-weight: 600; margin-bottom: 6px;">Product Description</label>
+          <textarea name="description" rows="3" placeholder="Describe the tailoring, fabric composition, silhouette and mood..." style="width: 100%; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-family: inherit;"></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+          <div>
+            <label style="display: block; font-size: 0.84rem; font-weight: 600; margin-bottom: 6px;">Upload Product Image (AI processes this automatically)</label>
+            <input type="file" name="image" accept=".jpg,.jpeg,.png,.webp" style="padding: 10px 0;">
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.84rem; font-weight: 600; margin-bottom: 6px;">Shopping URL (Boutique link) *</label>
+            <input type="url" name="shopping_url" required placeholder="https://..." style="width: 100%; padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); font-family: inherit;">
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 14px;">
+          <button type="submit" class="btn btn-chartreuse">Save & Vectorize Product</button>
+          <button type="button" class="btn btn-outline" onclick="toggleAddModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Products Table -->
+    <div style="background: var(--color-cream-card); border-radius: var(--radius-lg); border: 1px solid var(--color-border); overflow: hidden; box-shadow: var(--shadow-sm);">
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem;">
+          <thead>
+            <tr style="background: var(--color-cream); border-bottom: 1px solid var(--color-border); color: var(--color-espresso);">
+              <th style="padding: 16px 20px;">Photo</th>
+              <th style="padding: 16px 20px;">Product Name & Brand</th>
+              <th style="padding: 16px 20px;">Category</th>
+              <th style="padding: 16px 20px;">Colour</th>
+              <th style="padding: 16px 20px;">Price</th>
+              <th style="padding: 16px 20px;">Embedding</th>
+              <th style="padding: 16px 20px; text-align: right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for product in products %}
+            <tr style="border-bottom: 1px solid var(--color-border);">
+              <td style="padding: 14px 20px;">
+                <img src="{{ product.image_url }}" alt="{{ product.name }}" style="width: 50px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid var(--color-border);" onerror="this.src='https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=200&q=80'">
+              </td>
+              <td style="padding: 14px 20px;">
+                <div style="font-weight: 600; color: var(--color-espresso);">{{ product.name }}</div>
+                <div style="font-size: 0.78rem; color: var(--color-muted); text-transform: uppercase;">{{ product.brand }}</div>
+              </td>
+              <td style="padding: 14px 20px;">{{ product.category }}</td>
+              <td style="padding: 14px 20px;">{{ product.color }}</td>
+              <td style="padding: 14px 20px; font-weight: 600; font-family: var(--font-serif); font-size: 1.1rem;">${{ "%.2f"|format(product.price) }}</td>
+              <td style="padding: 14px 20px;">
+                {% if product.embedding %}
+                <span style="display: inline-block; background: #E8F5E9; color: #2E7D32; padding: 4px 8px; border-radius: var(--radius-pill); font-size: 0.74rem; font-weight: 600;">✓ 512-D CLIP</span>
+                {% else %}
+                <span style="display: inline-block; background: #FFF3E0; color: #E65100; padding: 4px 8px; border-radius: var(--radius-pill); font-size: 0.74rem; font-weight: 600;">Pending</span>
+                {% endif %}
+              </td>
+              <td style="padding: 14px 20px; text-align: right;">
+                <div style="display: inline-flex; gap: 8px;">
+                  <a href="{{ product.shopping_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="padding: 6px 12px; font-size: 0.74rem;">Visit</a>
+                  <form action="{{ url_for('admin_delete_product', product_id=product.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');" style="display: inline;">
+                    <button type="submit" class="btn btn-sm" style="background: #FDF2F0; color: #C0392B; border: 1px solid #FADBD8; padding: 6px 12px; font-size: 0.74rem;">Delete</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleAddModal() {
+  const card = document.getElementById('addProductCard');
+  if (card.style.display === 'none' || card.style.display === '') {
+    card.style.display = 'block';
+    card.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    card.style.display = 'none';
+  }
+}
+</script>
+{% endblock %}
+
