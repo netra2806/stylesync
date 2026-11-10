@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f4ec" />
+  <meta name="description" content="StyleSync — discover clothing that matches your inspiration with visual AI search." />
+  <title>StyleSync — Find your next favourite look</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="static/css/style.css" />
+</head>
+<body>
+  <div class="announcement-bar">YOUR NEXT FAVOURITE LOOK IS CLOSER THAN YOU THINK <span>✳</span> VISUAL SEARCH, REIMAGINED</div>
+
+  <header class="site-header" id="top">
+    <a class="brand" href="#home" aria-label="StyleSync home">
+      <span class="brand-mark">s<span>✳</span></span>
+      <span>style<span class="brand-light">sync</span></span>
+    </a>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+
+    <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+      <a class="nav-link active" href="#home">Home</a>
+      <a class="nav-link" href="#discover">Discover</a>
+      <a class="nav-link" href="#how-it-works">How it works</a>
+      <a class="nav-link" href="#about">About</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-button" id="searchFocusButton" aria-label="Go to visual search" title="Visual search">⌕</button>
+      <button class="icon-button wishlist-header" id="wishlistButton" aria-label="View wishlist" title="Wishlist">♡ <span class="wishlist-count" id="wishlistCount">0</span></button>
+      <a class="header-cta" href="#visual-search">Find my style <span>↗</span></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero section-shell" id="home">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-line"></span> THE NEW WAY TO FIND FASHION</p>
+        <h1>Find your<br />next favourite<br /><em>look.</em></h1>
+        <p class="hero-description">One picture. Endless possibilities. Discover pieces that match your mood, your taste, and your aesthetic.</p>
+        <div class="hero-actions">
+          <a class="button button-dark" href="#visual-search">Discover your style <span>↗</span></a>
+          <a class="text-link" href="#discover">Explore the edit <span>↓</span></a>
+        </div>
+        <div class="hero-footnote"><span class="sparkle">✳</span><span>Less scrolling.<br /><strong>More finding.</strong></span></div>
+      </div>
+
+      <div class="hero-art" aria-label="Fashion editorial collage">
+        <div class="hero-orbit orbit-one"></div>
+        <div class="hero-orbit orbit-two"></div>
+        <div class="hero-photo hero-photo-main">
+          <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1000&q=85" alt="Fashion editorial inspiration" />
+          <span class="photo-label">THE EVERYDAY EDIT · 01</span>
+        </div>
+        <div class="hero-photo hero-photo-small">
+          <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=600&q=85" alt="Street style fashion inspiration" />
+        </div>
+        <div class="hero-note note-top"><span>YOUR STYLE,</span><strong>YOUR RULES.</strong></div>
+        <div class="hero-note note-bottom"><span class="note-star">✳</span><span>VISUAL<br />DISCOVERY</span></div>
+        <div class="hero-sticker">STYLE<br /><i>FOUND</i></div>
+      </div>
+      <a class="scroll-cue" href="#visual-search"><span></span> SCROLL TO EXPLORE</a>
+    </section>
+
+    <section class="search-section section-shell" id="visual-search">
+      <div class="section-heading search-heading">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-line"></span> YOUR PERSONAL STYLE FINDER</p>
+          <h2>Got an outfit <em>crush?</em></h2>
+        </div>
+        <p class="section-intro">That look you saved? Let's find something just like it. Drop in a photo and let the search begin.</p>
+      </div>
+
+      <div class="upload-layout">
+        <div class="upload-card" id="dropZone">
+          <input type="file" id="imageInput" accept="image/png,image/jpeg,image/webp" hidden />
+          <div class="upload-empty" id="uploadEmpty">
+            <div class="upload-icon">↥</div>
+            <p class="upload-kicker">A LITTLE STYLE INSPIRATION</p>
+            <h3>Drop your image<br />right <em>here.</em></h3>
+            <p class="upload-help">Drag & drop an outfit image, or browse your files.</p>
+            <button type="button" class="button button-lime" id="browseButton">Browse image <span>↗</span></button>
+            <p class="file-note">JPG, PNG or WEBP · MAX 8 MB</p>
+          </div>
+          <div class="upload-preview hidden" id="uploadPreview">
+            <img id="previewImage" src="" alt="Your uploaded outfit preview" />
+            <div class="preview-overlay"><span>YOUR INSPIRATION</span><button type="button" id="removeImage" aria-label="Remove uploaded image">×</button></div>
+          </div>
+          <div class="drop-hint">✳ DROP IT LIKE IT'S HOT</div>
+        </div>
+
+        <div class="upload-aside">
+          <span class="aside-number">01 / UPLOAD</span>
+          <h3>Start with a<br /><em>feeling.</em></h3>
+          <p>It could be a Pinterest save, a street-style moment, or a look you spotted on your way out. If it inspires you, it belongs here.</p>
+          <div class="upload-tip"><span>✳</span><div><strong>THE MORE YOU LOVE IT, THE BETTER.</strong><small>For best results, use a clear image where the outfit is easy to see.</small></div></div>
+          <button type="button" class="button button-dark search-button" id="findMatchesButton" disabled>Find similar outfits <span>↗</span></button>
+          <p class="upload-status" id="uploadStatus" role="status">Your inspiration stays yours. Uploads are used for your search.</p>
+        </div>
+      </div>
+      <div class="search-loader hidden" id="searchLoader" aria-live="polite">
+        <div class="loader-flower">✳</div>
+        <p id="loaderMessage">Reading your aesthetic...</p>
+        <div class="loader-track"><span></span></div>
+      </div>
+      <div class="search-error hidden" id="searchError" role="alert"></div>
+    </section>
+
+    <section class="results-section section-shell hidden" id="resultsSection">
+      <div class="results-topline"><p class="eyebrow"><span class="eyebrow-line"></span> THE SEARCH RESULTS ARE IN</p><button class="reset-search" id="resetSearch">↶ Start a new search</button></div>
+      <div class="section-heading results-heading"><h2>Your style, <em>decoded.</em></h2><p class="section-intro" id="resultsSubtitle">Pieces inspired by your uploaded look.</p></div>
+      <div class="results-reference"><img id="resultsReferenceImage" src="" alt="Uploaded reference outfit" /><div><span>YOUR INSPIRATION</span><strong>Matched with your aesthetic.</strong></div></div>
+      <div class="product-toolbar"><p id="resultsCount">0 MATCHES</p><div class="toolbar-controls"><select id="categoryFilter" aria-label="Filter by category"><option value="all">All categories</option><option value="Dresses">Dresses</option><option value="Tops">Tops</option><option value="Jeans">Jeans</option><option value="Shoes">Shoes</option><option value="Accessories">Accessories</option></select><select id="sortFilter" aria-label="Sort products"><option value="match">Best match</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select></div></div>
+      <div class="product-grid" id="resultsGrid"></div>
+      <div class="empty-state hidden" id="noResults"><span>✳</span><h3>No close matches just yet.</h3><p>Try another image with a clearer view of the outfit.</p></div>
+    </section>
+
+    <section class="discover-section section-shell" id="discover">
+      <div class="section-heading discover-heading">
+        <div><p class="eyebrow"><span class="eyebrow-line"></span> A WORLD OF POSSIBILITIES</p><h2>Explore your <em>aesthetic.</em></h2></div>
+        <a class="text-link" href="#collection-grid">Explore all edits <span>↗</span></a>
+      </div>
+      <div class="collection-grid" id="collection-grid">
+        <a class="collection-card collection-large" href="#visual-search" data-category="Streetwear">
+          <img src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1100&q=85" alt="Streetwear fashion collection" loading="lazy" />
+          <span class="collection-index">01 — THE CITY UNIFORM</span><div class="collection-caption"><div><h3>Streetwear<br /><em>diaries.</em></h3><p>Made for the streets, styled by you.</p></div><span class="round-arrow">↗</span></div>
+        </a>
+        <a class="collection-card collection-tall" href="#visual-search" data-category="Minimalist">
+          <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=900&q=85" alt="Minimalist everyday fashion" loading="lazy" />
+          <span class="collection-index">02 — LESS, BUT BETTER</span><div class="collection-caption"><div><h3>The minimal<br /><em>edit.</em></h3><p>Quiet pieces. Big energy.</p></div><span class="round-arrow">↗</span></div>
+        </a>
+        <a class="collection-card collection-wide" href="#visual-search" data-category="Party Wear">
+          <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1100&q=85" alt="Fashion-forward party wear collection" loading="lazy" />
+          <span class="collection-index">03 — AFTER HOURS</span><div class="collection-caption"><div><h3>Party after <em>dark.</em></h3><p>For the nights that become stories.</p></div><span class="round-arrow">↗</span></div>
+        </a>
+        <a class="collection-card collection-small" href="#visual-search" data-category="Traditional Wear">
+          <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=85" alt="Traditional fashion collection" loading="lazy" />
+          <span class="collection-index">04 — ROOTED IN STYLE</span><div class="collection-caption"><div><h3>Tradition, <em>reframed.</em></h3><p>A little heritage, a lot of you.</p></div><span class="round-arrow">↗</span></div>
+        </a>
+      </div>
+    </section>
+
+    <section class="how-section" id="how-it-works">
+      <div class="section-shell how-inner">
+        <div class="how-heading"><p class="eyebrow"><span class="eyebrow-line"></span> EASY AS 01, 02, 03</p><h2>From inspo to<br /><em>in your cart.</em></h2><p>Finding your next favourite piece shouldn't feel like a full-time job.</p></div>
+        <div class="steps-list">
+          <article class="step-item"><span class="step-number">01</span><div><h3>Upload your inspiration</h3><p>Share a photo of an outfit you love. A screenshot, a saved pin, anything that sparks joy.</p></div><span class="step-symbol">↥</span></article>
+          <article class="step-item"><span class="step-number">02</span><div><h3>Let AI do its thing</h3><p>Our visual search compares image features to find pieces with a similar look and feel.</p></div><span class="step-symbol">✳</span></article>
+          <article class="step-item"><span class="step-number">03</span><div><h3>Find it. Love it. Wear it.</h3><p>Explore your matches, save the ones you love, and head to the retailer to shop.</p></div><span class="step-symbol">↗</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section section-shell" id="about">
+      <div class="about-art"><img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1000&q=85" alt="Editorial fashion portrait" loading="lazy" /><span class="about-stamp">DRESS<br />LIKE<br /><em>YOU.</em></span></div>
+      <div class="about-copy"><p class="eyebrow"><span class="eyebrow-line"></span> A NOTE FROM STYLESYNC</p><h2>Fashion discovery,<br /><em>made personal.</em></h2><p>StyleSync brings visual discovery and fashion together. Instead of scrolling through endless products, start with a look that inspires you and discover pieces that feel like you.</p><p class="about-signoff">Find your style. Make it yours. <span>✳</span></p></div>
+    </section>
+
+    <section class="closing-cta section-shell"><div class="closing-asterisk">✳</div><p class="eyebrow">YOUR NEXT LOOK IS WAITING</p><h2>See it. Search it.<br /><em>Style it.</em></h2><a class="button button-dark" href="#visual-search">Start discovering <span>↗</span></a></section>
+  </main>
+
+  <footer class="site-footer"><a class="brand footer-brand" href="#home"><span class="brand-mark">s<span>✳</span></span><span>style<span class="brand-light">sync</span></span></a><p>Made for the love of finding your look.</p><a href="#top" class="back-top">BACK TO TOP ↑</a><small>© <span id="year"></span> STYLESYNC. FIND YOUR KIND OF STYLE.</small></footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="wishlist-panel hidden" id="wishlistPanel" aria-label="Wishlist"><div class="wishlist-panel-head"><h3>Your saved styles</h3><button id="closeWishlist" aria-label="Close wishlist">×</button></div><div id="wishlistItems" class="wishlist-items"></div></div>
+
+  <script src="static/js/script.js"></script>
+</body>
+</html>
